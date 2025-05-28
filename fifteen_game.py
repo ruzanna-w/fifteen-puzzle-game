@@ -1,5 +1,6 @@
-import random
+import random, time
 import os
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -33,7 +34,11 @@ def find_inversions(n, numbers):
             else:
                 count += 1
     
-    solvability_check = count + free_field_position
+    if n % 2 == 0: # разрешимость пазла для четного размера поля (4х4)
+        solvability_check = count + free_field_position
+    elif n % 2 == 1: # разрешимость пазла для нечетного размера поля (3х3)
+        solvability_check = count
+
     return solvability_check
     
 # создать поле для игры
@@ -46,18 +51,16 @@ def generate_and_print_field(n, numbers, solvability_check):
                 row = []
                 for j in range(n):
                     row.append(numbers[i * n + j])
-                    if numbers[i * n + j] == 0:
-                        empty_position_row = i # найти координаты пустой ячейки (ряд)
-                        empty_position_column = j # найти координаты пустой ячейки (строка)
                 matrix.append(row)
             print()
-            for row in matrix:
-                for i in row:
-                    if i == 0:
-                        i = ''
-                        print(f'{i:^5}', end = '')  # замена 0 на пустую клетку
+            for row in range(len(matrix)):
+                for col in range(len(matrix[row])):
+                    if matrix[row][col] == 0:
+                        print(f'{'':^5}', end = '')  # замена 0 на пустую клетку
+                        empty_cell_row = row # найти координаты пустой ячейки (ряд)
+                        empty_cell_column = col # найти координаты пустой ячейки (строка)
                     else:
-                        print(f'{i:^5}', end = '')  # форматирование строки 1 - более
+                        print(f'{matrix[row][col]:^5}', end = '')  # форматирование строки 1 - более
                 print()
                 print()
             break
@@ -65,10 +68,25 @@ def generate_and_print_field(n, numbers, solvability_check):
             numbers = generate_numb(n)
             solvability_check = find_inversions(n, numbers)
     
-    return matrix, empty_position_row, empty_position_column
+    return matrix, empty_cell_row, empty_cell_column
 
+def update_matrix(matrix): 
+    print()
+    for row in range(len(matrix)):
+        for col in range(len(matrix[row])):
+            if matrix[row][col] == 0:
+                empty_cell_row = row # найти координаты пустой ячейки (ряд)
+                empty_cell_column = col # найти координаты пустой ячейки (строка)
+                print(f'{'':^5}', end = '')  # замена 0 на пустую клетку
+            else:
+                print(f'{matrix[row][col]:^5}', end = '')  # форматирование строки 1 - более
+        print()
+        print()
+    
+    return matrix, empty_cell_row, empty_cell_column
+    
 # ввод координатов
-def move_digits(matrix, empty_position_row, empty_position_column):
+def move_digits(matrix, empty_cell_row, empty_cell_column): 
 
     while True:
         move_number = int(input('напишите число, которое хотите передвинуть на пустую клетку: '))
@@ -76,15 +94,16 @@ def move_digits(matrix, empty_position_row, empty_position_column):
         # поиск позиции числа, которое хочу подвинуть на пустую ячейку
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
-                number_to_move = matrix[i][j]
-                if number_to_move == move_number:
-                    row_num_position = i
-                    column_num_position = j
+                if matrix[i][j] == move_number:
+                    number_cell_row = i
+                    number_cell_col = j
                     break
 
         # определить можно передвинуть цифру на пустую ячейку или нет (строго по вертикали или горизонтали)
-        if abs(empty_position_row - row_num_position) == 1 and (empty_position_column == column_num_position)\
-            or abs(empty_position_column - column_num_position) == 1 and (empty_position_row == row_num_position):
-            print('Можно передвинуть')
+        if abs(empty_cell_row - number_cell_row) == 1 and (empty_cell_column == number_cell_col)\
+            or abs(empty_cell_column - number_cell_col) == 1 and (empty_cell_row == number_cell_row):
+            # меняем местами ячейки
+            matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
+            matrix, empty_cell_row, empty_cell_column = update_matrix(matrix) # обновляю матрицу
         else:
-            print('Это число нельзя передвинуть. Введите другое число')
+            print('Это число нельзя передвинуть. Введите другое число, которое находится рядом с пустой клеткой')
