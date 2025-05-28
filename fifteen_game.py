@@ -1,7 +1,6 @@
 import random, time
 import os
 
-
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -86,24 +85,33 @@ def update_matrix(matrix):
     return matrix, empty_cell_row, empty_cell_column
     
 # ввод координатов
-def move_digits(matrix, empty_cell_row, empty_cell_column): 
+def move_digits(matrix, empty_cell_row, empty_cell_column, n): 
 
     while True:
-        move_number = int(input('напишите число, которое хотите передвинуть на пустую клетку: '))
+        try:
+            move_number = int(input('Введите число, которое хотите передвинуть на пустую клетку: '))
 
-        # поиск позиции числа, которое хочу подвинуть на пустую ячейку
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                if matrix[i][j] == move_number:
-                    number_cell_row = i
-                    number_cell_col = j
-                    break
+            if 1 <= move_number < n*n:
+                # поиск позиции числа, которое хочу подвинуть на пустую ячейку
+                for i in range(len(matrix)):
+                    for j in range(len(matrix[i])):
+                        if matrix[i][j] == move_number:
+                            number_cell_row = i
+                            number_cell_col = j
+            else:
+                print('Такого числа на поле нет')
+                continue
 
-        # определить можно передвинуть цифру на пустую ячейку или нет (строго по вертикали или горизонтали)
-        if abs(empty_cell_row - number_cell_row) == 1 and (empty_cell_column == number_cell_col)\
-            or abs(empty_cell_column - number_cell_col) == 1 and (empty_cell_row == number_cell_row):
-            # меняем местами ячейки
-            matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
-            matrix, empty_cell_row, empty_cell_column = update_matrix(matrix) # обновляю матрицу
-        else:
-            print('Это число нельзя передвинуть. Введите другое число, которое находится рядом с пустой клеткой')
+            # определить можно передвинуть цифру на пустую ячейку или нет (строго по вертикали или горизонтали)
+            if abs(empty_cell_row - number_cell_row) == 1 and (empty_cell_column == number_cell_col)\
+                or abs(empty_cell_column - number_cell_col) == 1 and (empty_cell_row == number_cell_row):
+                # меняем местами ячейки
+                clear()
+                matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
+                matrix, empty_cell_row, empty_cell_column = update_matrix(matrix) # обновляю матрицу
+            else:
+                print('Это число нельзя передвинуть. Введите другое число, которое находится рядом с пустой клеткой')
+                continue
+
+        except ValueError:
+            print(f'Введите число от 1 до {n*n - 1}')
