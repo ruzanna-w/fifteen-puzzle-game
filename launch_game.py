@@ -19,7 +19,7 @@ while True:
             numbers = generate_numb(n)
             solvability_check = find_inversions(n, numbers)
             matrix, empty_cell_row, empty_cell_column = generate_and_print_field(n, numbers, solvability_check)
-            move_digits(matrix, empty_cell_row, empty_cell_column)
+            move_digits(matrix, empty_cell_row, empty_cell_column, n)
             break
     except ValueError:
         print('Введите корректное значение для поля (например, 4х4)')
