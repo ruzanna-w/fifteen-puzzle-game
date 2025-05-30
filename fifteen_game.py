@@ -69,7 +69,9 @@ def generate_and_print_field(n, numbers, solvability_check):
     
     return matrix, empty_cell_row, empty_cell_column
 
-def update_matrix(matrix): 
+def update_matrix(matrix, total_moves): 
+
+    print(f'Количество шагов: {total_moves}')
     print()
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
@@ -121,11 +123,14 @@ def is_win(matrix, n):
 # ввод координатов
 def move_digits(matrix, empty_cell_row, empty_cell_column, n): 
 
+    total_moves = 0
+
     while True:
         try:
             move_number = int(input('Введите число, которое хотите передвинуть на пустую клетку: '))
 
             if 1 <= move_number < n*n:
+                total_moves += 1
                 # поиск позиции числа, которое хочу подвинуть на пустую ячейку
                 for i in range(len(matrix)):
                     for j in range(len(matrix[i])):
@@ -142,7 +147,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n):
                 # меняем местами ячейки
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
-                matrix, empty_cell_row, empty_cell_column = update_matrix(matrix) # обновляю матрицу
+                matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves) # обновляю матрицу
                 if is_win(matrix, n):
                     break
             else:
@@ -151,3 +156,5 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n):
 
         except ValueError:
             print(f'Введите число от 1 до {n*n - 1}')
+    
+    return total_moves
