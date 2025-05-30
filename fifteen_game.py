@@ -1,4 +1,4 @@
-import random, time
+import random
 import os
 
 def clear():
