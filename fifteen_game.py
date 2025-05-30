@@ -83,7 +83,41 @@ def update_matrix(matrix):
         print()
     
     return matrix, empty_cell_row, empty_cell_column
+
+def is_win(matrix, n):
     
+    check_win = []
+    
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if matrix[i][j] == 0:
+                pass
+            else:
+                check_win.append(matrix[i][j])
+
+    count = 0
+    # проверка инверсий
+    for r in range(len(check_win)):
+        for c in range(r + 1, len(check_win)):
+            if check_win[r] < check_win[c]:
+                pass
+            else:
+                count += 1
+
+    # найти позицию 0
+    win_zero_position = False
+    for a in range(len(matrix)):
+        for b in range(len(matrix[a])):
+            if matrix[a][b] == 0:
+                if a == n - 1 and b == n - 1:
+                    win_zero_position = True
+
+    # проверка победы
+    if count == 0 and win_zero_position:
+        print('Поздравляю вы выйграли игру!')
+        return True
+    
+        
 # ввод координатов
 def move_digits(matrix, empty_cell_row, empty_cell_column, n): 
 
@@ -109,6 +143,8 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n):
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
                 matrix, empty_cell_row, empty_cell_column = update_matrix(matrix) # обновляю матрицу
+                if is_win(matrix, n):
+                    break
             else:
                 print('Это число нельзя передвинуть. Введите другое число, которое находится рядом с пустой клеткой')
                 continue
