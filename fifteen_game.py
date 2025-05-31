@@ -69,8 +69,10 @@ def generate_and_print_field(n, numbers, solvability_check):
     
     return matrix, empty_cell_row, empty_cell_column
 
-def update_matrix(matrix, total_moves): 
+def update_matrix(matrix, total_moves, n, user_name): 
 
+    print(f'Ваше имя: {user_name}!\n')
+    print(f'Размер поля: {n}x{n}\n')
     print(f'Количество шагов: {total_moves}')
     print()
     for row in range(len(matrix)):
@@ -121,7 +123,7 @@ def is_win(matrix, n):
     
         
 # ввод координатов
-def move_digits(matrix, empty_cell_row, empty_cell_column, n): 
+def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name): 
 
     total_moves = 0
 
@@ -147,7 +149,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n):
                 # меняем местами ячейки
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
-                matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves) # обновляю матрицу
+                matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves, n, user_name) # обновляю матрицу
                 if is_win(matrix, n):
                     break
             else:
