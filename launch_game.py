@@ -1,4 +1,4 @@
-from fifteen_game import * 
+from fifteen_game import clear, generate_numb, find_inversions, generate_and_print_field, move_digits
 
 clear()
 print('''\033[35mДобро пожаловать в игру пятнашки!
