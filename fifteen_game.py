@@ -34,9 +34,7 @@ def find_inversions(n, numbers):
     # сравниваем числа в массиве
     for i in range(len(inversions)):
         for j in range(i + 1, len(inversions)):
-            if inversions[i] < inversions[j]:
-                pass
-            else:
+            if inversions[i] > inversions[j]:
                 count += 1
     
     if n % 2 == 0: # разрешимость пазла для четного размера поля (4х4)
@@ -61,7 +59,7 @@ def generate_and_print_field(n, numbers, solvability_check):
             for row in range(len(matrix)):
                 for col in range(len(matrix[row])):
                     if matrix[row][col] == 0:
-                        print(f'{'':^5}', end = '')  # замена 0 на пустую клетку
+                        print(f'{"":^5}', end = '')  # замена 0 на пустую клетку
                         empty_cell_row = row # найти координаты пустой ячейки (ряд)
                         empty_cell_column = col # найти координаты пустой ячейки (строка)
                     else:
@@ -79,14 +77,14 @@ def update_matrix(matrix, total_moves, n, user_name):
 
     print(f'{main_color}Ваше имя:{reset_color} {user_name}\n')
     print(f'{main_color}Размер поля:{reset_color} {n}x{n}\n')
-    print(f'{main_color}Количество шагов:{reset_color} {total_moves}')
-    print()
+    print(f'{main_color}Количество шагов:{reset_color} {total_moves}\n')
+    
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
             if matrix[row][col] == 0:
                 empty_cell_row = row # найти координаты пустой ячейки (ряд)
                 empty_cell_column = col # найти координаты пустой ячейки (строка)
-                print(f'{'':^5}', end = '')  # замена 0 на пустую клетку
+                print(f'{"":^5}', end = '')  # замена 0 на пустую клетку
             else:
                 print(f'{matrix[row][col]:^5}', end = '')  # форматирование строки 1 - более
         print()
