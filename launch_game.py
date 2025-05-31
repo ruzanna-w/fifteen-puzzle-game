@@ -1,6 +1,7 @@
 from fifteen_game import clear, generate_numb, find_inversions, generate_and_print_field, move_digits
 from fifteen_game import mistake_color, main_color, welcome_color, reset_color
 import time
+from json_tools import save_game
 
 clear()
 
@@ -34,7 +35,9 @@ while True:
             numbers = generate_numb(n)
             solvability_check = find_inversions(n, numbers)
             matrix, empty_cell_row, empty_cell_column = generate_and_print_field(n, numbers, solvability_check)
+            save_game(user_name, n, 0)
             total_moves = move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color)
+            save_game(user_name, n, total_moves)
             break
     except ValueError:
         print(f'\n{mistake_color}Введите корректное значение для поля (например, 4х4){reset_color}')
