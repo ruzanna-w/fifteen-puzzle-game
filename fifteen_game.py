@@ -1,6 +1,12 @@
 import random
 import os
 
+mistake_color = '\033[38;2;204;6;5m'
+victory_color = '\033[38;2;52;201;36m'
+main_color = '\033[1m\033[38;2;147;112;216m'
+welcome_color = '\033[38;2;220;180;0m'
+reset_color = '\033[0m'
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -71,9 +77,9 @@ def generate_and_print_field(n, numbers, solvability_check):
 
 def update_matrix(matrix, total_moves, n, user_name): 
 
-    print(f'Ваше имя: {user_name}!\n')
-    print(f'Размер поля: {n}x{n}\n')
-    print(f'Количество шагов: {total_moves}')
+    print(f'{main_color}Ваше имя:{reset_color} {user_name}\n')
+    print(f'{main_color}Размер поля:{reset_color} {n}x{n}\n')
+    print(f'{main_color}Количество шагов:{reset_color} {total_moves}')
     print()
     for row in range(len(matrix)):
         for col in range(len(matrix[row])):
@@ -118,18 +124,18 @@ def is_win(matrix, n):
 
     # проверка победы
     if count == 0 and win_zero_position:
-        print('Поздравляю вы выйграли игру!')
+        print(f'{victory_color}Поздравляю вы выйграли игру!{reset_color} ')
         return True
     
         
 # ввод координатов
-def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name): 
+def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color): 
 
     total_moves = 0
 
     while True:
         try:
-            move_number = int(input('Введите число, которое хотите передвинуть на пустую клетку: '))
+            move_number = int(input(f'{main_color}Введите число, которое хотите передвинуть на пустую клетку:\033[0m '))
 
             if 1 <= move_number < n*n:
                 total_moves += 1
@@ -140,7 +146,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name):
                             number_cell_row = i
                             number_cell_col = j
             else:
-                print('Такого числа на поле нет')
+                print(f'\n{mistake_color}Такого числа на поле нет{reset_color}\n')
                 continue
 
             # определить можно передвинуть цифру на пустую ячейку или нет (строго по вертикали или горизонтали)
@@ -153,10 +159,10 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name):
                 if is_win(matrix, n):
                     break
             else:
-                print('Это число нельзя передвинуть. Введите другое число, которое находится рядом с пустой клеткой')
+                print(f'{mistake_color}\nЭто число нельзя передвинуть.\nВведите другое число, которое находится рядом с пустой клеткой{reset_color}\n')
                 continue
 
         except ValueError:
-            print(f'Введите число от 1 до {n*n - 1}')
+            print(f'\n{mistake_color}Введите число от 1 до {n*n - 1}{reset_color}\n')
     
     return total_moves
