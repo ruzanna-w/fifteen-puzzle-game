@@ -124,7 +124,6 @@ def is_win(matrix, n):
     if count == 0 and win_zero_position:
         print(f'{victory_color}Поздравляю вы выйграли игру!{reset_color} ')
         return True
-    
         
 # ввод координатов
 def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color): 
@@ -136,7 +135,6 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
             move_number = int(input(f'{main_color}Введите число, которое хотите передвинуть на пустую клетку:\033[0m '))
 
             if 1 <= move_number < n*n:
-                total_moves += 1
                 # поиск позиции числа, которое хочу подвинуть на пустую ячейку
                 for i in range(len(matrix)):
                     for j in range(len(matrix[i])):
@@ -151,6 +149,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
             if abs(empty_cell_row - number_cell_row) == 1 and (empty_cell_column == number_cell_col)\
                 or abs(empty_cell_column - number_cell_col) == 1 and (empty_cell_row == number_cell_row):
                 # меняем местами ячейки
+                total_moves += 1
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
                 matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves, n, user_name) # обновляю матрицу
