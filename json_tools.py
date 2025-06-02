@@ -1,17 +1,18 @@
 import json
 
-def save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column):
+def save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status):
     
     game_state = {
         'user_name': user_name,
         'field_size': n,
         'total_moves': total_moves,
         'matrix': matrix,
-        'empty_cell_position': [empty_cell_row, empty_cell_column]
+        'empty_cell_position': [empty_cell_row, empty_cell_column],
+        'game_status': game_status
     }
 
     with open('save.json', 'w') as save:
-        json.dump(game_state, save, indent=4)
+        json.dump(game_state, save, indent=4, ensure_ascii=False)
 
 
 def load_game():
@@ -23,6 +24,7 @@ def load_game():
             total_moves = game_data['total_moves']
             matrix = game_data['matrix']
             empty_cell_position = game_data['empty_cell_position']
-            return user_name, field_size, total_moves, matrix, empty_cell_position
+            game_status = game_data['game_status']
+            return user_name, field_size, total_moves, matrix, empty_cell_position, game_status
     except FileNotFoundError:
         print('Нет сохраненной игры')
