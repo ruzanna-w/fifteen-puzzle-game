@@ -1,5 +1,4 @@
-import random
-import os
+import random, os
 from json_tools import save_game, load_game
 
 mistake_color = '\033[38;2;204;6;5m'
@@ -135,9 +134,16 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
         _, _, total_moves, _, _ = load_game()
 
     while True:
-        try:
-            move_number = int(input(f'{main_color}Введите число, которое хотите передвинуть на пустую клетку:\033[0m '))
+        game_status = 'В процессе'
 
+        try:
+            move_number = input(f'{main_color}Введите число, которое хотите передвинуть на пустую клетку или "q", чтобы выйти из игры:\033[0m ')
+
+            if move_number.lower() == 'q':
+                print(f'\n{mistake_color}Вы вышли из игры{reset_color}')
+                save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
+                
+            move_number = int(move_number)
             if 1 <= move_number < n*n:
                 # поиск позиции числа, которое хочу подвинуть на пустую ячейку
                 for i in range(len(matrix)):
@@ -157,7 +163,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
                 matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves, n, user_name) # обновляю матрицу
-                save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column)
+                save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
                 if is_win(matrix, n):
                     break
             else:
@@ -167,4 +173,4 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
         except ValueError:
             print(f'\n{mistake_color}Введите число от 1 до {n*n - 1}{reset_color}\n')
     
-    return total_moves
+    return game_status, total_moves
