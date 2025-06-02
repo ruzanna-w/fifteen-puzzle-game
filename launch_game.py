@@ -46,27 +46,26 @@ while True:
                         numbers = generate_numb(n)
                         solvability_check = find_inversions(n, numbers)
                         matrix, empty_cell_row, empty_cell_column = generate_and_print_field(n, numbers, solvability_check)
-                        save_game(user_name, n, 0, matrix, empty_cell_row, empty_cell_column)
-                        total_moves = move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color, choice)
-                        save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column)
+                        save_game(user_name, n, 0, matrix, empty_cell_row, empty_cell_column, game_status='Новая игра')
+                        game_status, total_moves = move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color, choice)
+                        save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
                         break
                 except ValueError:
                     print(f'\n{mistake_color}Введите корректное значение для поля (например, 4х4){reset_color}')
             
         elif choice == 2:
             clear()
-            user_name, field_size, total_moves, matrix, empty_cell_position = load_game()
-            update_matrix(matrix, total_moves, field_size, user_name)
-            empty_cell_row, empty_cell_column = empty_cell_position
-            total_moves = move_digits(matrix, empty_cell_row, empty_cell_column, field_size, user_name, mistake_color, reset_color, choice)
-            break
-
-        else:
-            print(f'\n{mistake_color}Необходимо ввести 1 или 2{reset_color}')
-            time.sleep(3)
-            clear()
-            print(welcome_text)
-        
+            if load_game() == None:
+                time.sleep(3)
+                clear()
+                continue
+            else:
+                user_name, field_size, total_moves, matrix, empty_cell_position, game_status = load_game()
+                update_matrix(matrix, total_moves, field_size, user_name)
+                empty_cell_row, empty_cell_column = empty_cell_position
+                move_digits(matrix, empty_cell_row, empty_cell_column, field_size, user_name, mistake_color, reset_color, choice)
+                break
+            
     except ValueError:
         print(f'\n{mistake_color}Необходимо ввести 1 или 2{reset_color}')
         time.sleep(3)
