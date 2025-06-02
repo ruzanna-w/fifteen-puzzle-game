@@ -1,5 +1,6 @@
 import random
 import os
+from json_tools import save_game, load_game
 
 mistake_color = '\033[38;2;204;6;5m'
 victory_color = '\033[38;2;52;201;36m'
@@ -126,9 +127,12 @@ def is_win(matrix, n):
         return True
         
 # ввод координатов
-def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color): 
+def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color, choice): 
 
-    total_moves = 0
+    if choice == 1:
+        total_moves = 0
+    else:
+        _, _, total_moves, _, _ = load_game()
 
     while True:
         try:
@@ -153,6 +157,7 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
                 clear()
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
                 matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves, n, user_name) # обновляю матрицу
+                save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column)
                 if is_win(matrix, n):
                     break
             else:
