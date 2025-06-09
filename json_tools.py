@@ -1,4 +1,5 @@
 import json
+import os
 
 def save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status):
     
@@ -28,3 +29,16 @@ def load_game():
             return user_name, field_size, total_moves, matrix, empty_cell_position, game_status
     except FileNotFoundError:
         print('Нет сохраненной игры')
+
+def delete_game():
+    try:
+        with open('save.json') as victory:
+            game = json.load(victory)
+
+        if game['game_status'] == 'Победа':
+            os.remove('save.json')
+        else:
+            print('Игра ещё не завершена')
+
+    except FileNotFoundError:
+        print('Файл сохранения не найден')
