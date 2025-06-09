@@ -1,16 +1,11 @@
 from fifteen_game import clear, generate_numb, find_inversions, generate_and_print_field, move_digits, update_matrix
-from fifteen_game import mistake_color, main_color, welcome_color, reset_color
+from ui import mistake_color, main_color, reset_color, welcome_text
 import time
 from json_tools import save_game, load_game, delete_game
 
 clear()
 
-welcome_text = (f'''{welcome_color}Добро пожаловать в игру пятнашки!
-Вам необходимо ввести размер поля, например, 4 для поля 4x4
-при этом размер поля должен быть больше 2х{reset_color} ''')
-
 print(welcome_text)
-
 
 exit_program = False
 game_status = 'В процессе'

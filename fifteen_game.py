@@ -1,11 +1,6 @@
 import random, os
 from json_tools import save_game, load_game
-
-mistake_color = '\033[38;2;204;6;5m'
-victory_color = '\033[38;2;52;201;36m'
-main_color = '\033[1m\033[38;2;147;112;216m'
-welcome_color = '\033[38;2;220;180;0m'
-reset_color = '\033[0m'
+from ui import mistake_color, main_color, reset_color, victory_color
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
