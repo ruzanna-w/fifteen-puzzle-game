@@ -92,8 +92,7 @@ def update_matrix(matrix, total_moves, n, user_name):
     
     return matrix, empty_cell_row, empty_cell_column
 
-def is_win(matrix, n):
-    
+def is_win(matrix, n, game_status, user_name, total_moves, empty_cell_row, empty_cell_column):
     check_win = []
     
     for i in range(len(matrix)):
@@ -122,26 +121,36 @@ def is_win(matrix, n):
 
     # проверка победы
     if count == 0 and win_zero_position:
+        game_status = 'Победа'
         print(f'{victory_color}Поздравляю вы выйграли игру!{reset_color} ')
-        return True
+        save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
+        return game_status, total_moves, matrix, empty_cell_row, empty_cell_column
+    return game_status, total_moves, matrix, empty_cell_row, empty_cell_column
+
+#выход из игры   
+def exit_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status):
+    save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
+    print(f'\n{mistake_color}Вы вышли из игры. Прогресс сохранён.{reset_color}')
+    return user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status
         
 # ввод координатов
 def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake_color, reset_color, choice): 
 
     if choice == 1:
         total_moves = 0
-    else:
-        _, _, total_moves, _, _ = load_game()
+    elif choice == 2:
+        user_name, _, total_moves, matrix, _, game_status = load_game()
 
     while True:
-        game_status = 'В процессе'
 
         try:
+            game_status = 'В процессе'
             move_number = input(f'{main_color}Введите число, которое хотите передвинуть на пустую клетку или "q", чтобы выйти из игры:\033[0m ')
 
             if move_number.lower() == 'q':
-                print(f'\n{mistake_color}Вы вышли из игры{reset_color}')
-                save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
+                game_status = 'Выход'
+                exit_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
+                return game_status, total_moves, matrix, empty_cell_row, empty_cell_column
                 
             move_number = int(move_number)
             if 1 <= move_number < n*n:
@@ -164,7 +173,8 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
                 matrix[empty_cell_row][empty_cell_column], matrix[number_cell_row][number_cell_col] = matrix[number_cell_row][number_cell_col], matrix[empty_cell_row][empty_cell_column]
                 matrix, empty_cell_row, empty_cell_column = update_matrix(matrix, total_moves, n, user_name) # обновляю матрицу
                 save_game(user_name, n, total_moves, matrix, empty_cell_row, empty_cell_column, game_status)
-                if is_win(matrix, n):
+                game_status, total_moves, matrix, empty_cell_row, empty_cell_column = is_win(matrix, n, game_status, user_name, total_moves, empty_cell_row, empty_cell_column)
+                if game_status == 'Победа':
                     break
             else:
                 print(f'{mistake_color}\nЭто число нельзя передвинуть.\nВведите другое число, которое находится рядом с пустой клеткой{reset_color}\n')
@@ -173,4 +183,4 @@ def move_digits(matrix, empty_cell_row, empty_cell_column, n, user_name, mistake
         except ValueError:
             print(f'\n{mistake_color}Введите число от 1 до {n*n - 1}{reset_color}\n')
     
-    return game_status, total_moves
+    return game_status, total_moves, matrix, empty_cell_row, empty_cell_column
